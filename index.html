@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+
+  <!-- Theme is applied FIRST (before any CSS loads) so the page never flashes the wrong colours. -->
+  <script>
+    (function () {
+      var root = document.documentElement, theme = null;
+      root.classList.add('js');
+      try { theme = localStorage.getItem('eventora-theme'); } catch (e) {}
+      if (theme !== 'light' && theme !== 'dark') {
+        theme = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      }
+      root.setAttribute('data-theme', theme);
+    })();
+  </script>
+  <style>
+    html { background: #F9FAFB; }
+    html[data-theme="dark"] { background: #111827; color-scheme: dark; }
+  </style>
+  <title>GRS Event Management </title>
+  <meta name="description" content="Professional event management company for weddings, corporate events, birthday parties, concerts and special occasions in Chennai, Tamil Nadu. Watch our event films and browse the gallery.">
+  <meta name="theme-color" content="#F9FAFB">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Eventora | Event Management for Weddings, Corporate Events &amp; Parties">
+  <meta property="og:description" content="Professional event management company for weddings, corporate events, birthday parties, concerts and special occasions in Chennai, Tamil Nadu.">
+  
+  
+
+  <!-- Fonts: Fraunces (headings) + Plus Jakarta Sans (body). System fonts are used if offline. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+
+  <!-- ?v= is bumped whenever style.css / script.js change; the server also
+       revalidates both files on every visit, so an edit is never missed. -->
+  <link rel="stylesheet" href="css/style.css?v=3">
+
+  <script src="js/script.js?v=3" defer></script>
+</head>
+<body data-page="home">
+
+<!-- ===== PAGE PREVIEW (loading overlay) ===== -->
+<!-- Shown from the first paint until the page is ready, and again while a link to
+     another page is followed. js/script.js (section 15) fades it away; the
+     failsafe in css/style.css (section 23) removes it if the script never runs. -->
+<div class="page-loader" id="page-loader" role="status" aria-live="polite">
+  <div class="page-loader__inner">
+    <span class="page-loader__mark" aria-hidden="true">
+      <span class="page-loader__ring"></span>
+      <img class="page-loader__logo" src="images/logo.png" alt="" width="54" height="54">
+    </span>
+    <span class="page-loader__name">GRS<span>Event</span></span>
+    <span class="page-loader__bar" aria-hidden="true"><span></span></span>
+    <span class="page-loader__text">Loading…</span>
+  </div>
+</div>
+
+<a class="skip-link" href="#main">Skip to main content</a>
+
+<header class="site-header" id="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="index.html" aria-label="Eventora – Home">
+      <img src="images/logo.png" alt="Eventora logo" width="42" height="42">
+      <span class="brand__name">GRS<span>Event</span></span>
+    </a>
+
+    <nav class="nav" id="primary-nav" aria-label="Primary">
+      <ul class="nav-list">
+          <li><a class="nav-link active" data-page="home" href="index.html" aria-current="page">Home</a></li>
+          <li><a class="nav-link" data-page="events" href="events.html">Events</a></li>
+          <li><a class="nav-link" data-page="company" href="company.html">Company</a></li>
+          <li><a class="nav-link" data-page="contact" href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+
+    <div class="header-actions">
+      <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Switch to dark mode">
+        <svg class="icon icon-moon" aria-hidden="true" focusable="false"><use href="#icon-moon"></use></svg>
+        <svg class="icon icon-sun" aria-hidden="true" focusable="false"><use href="#icon-sun"></use></svg>
+      </button>
+      <button class="nav-toggle" id="nav-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="primary-nav">
+        <span class="nav-toggle__bar"></span>
+        <span class="nav-toggle__bar"></span>
+        <span class="nav-toggle__bar"></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- ===== HERO ===== -->
+  <section class="hero" aria-labelledby="hero-title">
+    <img class="hero__bg" src="images/hero.jpg" alt="Elegant event venue lit by warm stage lights" width="1920" height="1080" fetchpriority="high">
+    <div class="hero__beams" aria-hidden="true">
+      <i style="--x:34%; --r:-15deg; --c:rgba(244,114,182,.55); --d:.15s"></i>
+      <i style="--x:50%; --r:-2deg;  --c:rgba(255,255,255,.45); --d:.35s; --o:.85"></i>
+      <i style="--x:64%; --r:13deg;  --c:rgba(167,139,250,.6);  --d:.55s"></i>
+    </div>
+    <div class="container">
+      <div class="hero__content">
+        <h1 id="hero-title">
+          <span class="line" style="--d:.2s"><span>GRS Event We Create Experiences</span></span>
+          <span class="line" style="--d:.38s"><span>That People Remember</span></span>
+        </h1>
+        <p class="hero__lead">Professional Event Management for Weddings, Corporate Events, Parties, Concerts and Special Occasions.</p>
+        <div class="hero__actions">
+          <a class="btn btn-primary" href="events.html">Explore Events</a>
+          <a class="btn btn-light" href="#contact">Contact Us</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SERVICES ===== -->
+  <section class="section" id="services" aria-labelledby="services-title">
+    <div class="container">
+      <div class="section-head reveal">
+        <h2 id="services-title">Our Services</h2>
+        <p>From intimate celebrations to large-scale productions, we look after every detail so you can enjoy the moment.</p>
+      </div>
+      <div class="services-grid" data-stagger>
+        <article class="service-card">
+          <span class="icon-chip"><svg class="icon" aria-hidden="true" focusable="false"><use href="#icon-heart"></use></svg></span>
+          <h3>Wedding Events</h3>
+          <p>Timeless, personal weddings with graceful planning, décor and flawless coordination.</p>
+        </article>
+
+        <article class="service-card">
+          <span class="icon-chip"><svg class="icon" aria-hidden="true" focusable="false"><use href="#icon-briefcase"></use></svg></span>
+          <h3>Corporate Events</h3>
+          <p>Conferences, launches and galas that reflect your brand and keep every guest engaged.</p>
+        </article>
+
+        <article class="service-card">
+          <span class="icon-chip"><svg class="icon" aria-hidden="true" focusable="false"><use href="#icon-gift"></use></svg></span>
+          <h3>Birthday Parties</h3>
+          <p>Themed celebrations for every age, with décor, entertainment and memorable moments.</p>
+        </article>
+
+        <article class="service-card">
+          <span class="icon-chip"><svg class="icon" aria-hidden="true" focusable="false"><use href="#icon-music"></use></svg></span>
+          <h3>Concerts</h3>
+          <p>Stage, sound, lighting and crowd management for live shows people talk about for years.</p>
+        </article>
+
+        <article class="service-card">
+          <span class="icon-chip"><svg class="icon" aria-hidden="true" focusable="false"><use href="#icon-gem"></use></svg></span>
+          <h3>Engagements</h3>
+          <p>Beautifully styled engagement ceremonies that begin your journey together in style.</p>
+        </article>
+
+        <article class="service-card">
+          <span class="icon-chip"><svg class="icon" aria-hidden="true" focusable="false"><use href="#icon-camera"></use></svg></span>
+          <h3>Photography</h3>
+          <p>Photo and video coverage that keeps every candid smile and emotional moment.</p>
+        </article>
+
+        <article class="service-card">
+          <span class="icon-chip"><svg class="icon" aria-hidden="true" focusable="false"><use href="#icon-sparkles"></use></svg></span>
+          <h3>Stage Decoration</h3>
+          <p>Custom stages, floral design and lighting that turn any venue into a showpiece.</p>
+        </article>
+
+        <article class="service-card">
+          <span class="icon-chip"><svg class="icon" aria-hidden="true" focusable="false"><use href="#icon-utensils"></use></svg></span>
+          <h3>Catering</h3>
+          <p>Curated menus and attentive service that suit any guest count and any taste.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== WHY CHOOSE US ===== -->
+  <section class="section why" id="why-us" aria-labelledby="why-title">
+    <div class="container why-layout">
+      <div class="why-intro reveal">
+        <h2 id="why-title">Why Choose Us</h2>
+        <p>Every event is built around your vision and delivered by people who care about getting the details right.</p>
+        <a class="btn btn-light" href="company.html">About Our Company</a>
+      </div>
+      <div class="why-grid" data-stagger>
+        <article class="why-card">
+          <span class="icon-chip"><svg class="icon" aria-hidden="true" focusable="false"><use href="#icon-users"></use></svg></span>
+          <h3>Professional Team</h3>
+          <p>Experienced planners, designers and coordinators working as one seamless unit.</p>
+        </article>
+
+        <article class="why-card">
+          <span class="icon-chip"><svg class="icon" aria-hidden="true" focusable="false"><use href="#icon-lightbulb"></use></svg></span>
+          <h3>Creative Ideas</h3>
+          <p>Fresh concepts and personal touches that make your event truly one of a kind.</p>
+        </article>
+
+        <article class="why-card">
+          <span class="icon-chip"><svg class="icon" aria-hidden="true" focusable="false"><use href="#icon-clock"></use></svg></span>
+          <h3>On-Time Execution</h3>
+          <p>Detailed timelines and on-site management so everything runs exactly as planned.</p>
+        </article>
+
+        <article class="why-card">
+          <span class="icon-chip"><svg class="icon" aria-hidden="true" focusable="false"><use href="#icon-tag"></use></svg></span>
+          <h3>Affordable Packages</h3>
+          <p>Flexible, transparent pricing with premium quality for every budget.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== TEAM ===== -->
+  <section class="section section--alt" id="team" aria-labelledby="team-title">
+    <div class="container">
+      <div class="section-head reveal">
+        <h2 id="team-title">Meet Our Team</h2>
+        <p>The planners, designers and storytellers who turn your ideas into events.</p>
+      </div>
+      <div class="team-grid team-grid--duo" data-stagger>
+
+        <article class="team-member">
+          <div class="team-photo">
+            <div class="team-photo__inner">
+              <img src="images/img.jpeg" alt="Portrait of our Founder & CEO" width="800" height="800" loading="lazy">
+            </div>
+          </div>
+          <div class="team-info">
+            <h3>RAJKUMAR S</h3>
+            <p class="team-role">Founder &amp; CEO</p>
+            <ul class="team-social" aria-label="Founder & CEO social links">
+              <li><a href="https://instagram.com/magical_event.123?stkn=OWV3anhiODFqaGh4" target="_blank" rel="noopener noreferrer" aria-label="Founder & CEO on Instagram"><svg class="icon" aria-hidden="true" focusable="false"><use href="#icon-instagram"></use></svg></a></li>
+              <li><a href="tel:+917825040275" aria-label="Email"><svg class="icon" aria-hidden="true" focusable="false"><use href="#icon-phone"></use></svg></a></li>
+            </ul>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== STATISTICS ===== -->
+  <section class="stats" aria-label="Our achievements">
+    <div class="container stats-grid">
+      <div class="stat">
+        <p class="stat__value"><span class="counter" data-target="500">500</span>+</p>
+        <p class="stat__label">Events Completed</p>
+      </div>
+
+      <div class="stat">
+        <p class="stat__value"><span class="counter" data-target="350">350</span>+</p>
+        <p class="stat__label">Happy Clients</p>
+      </div>
+
+      <div class="stat">
+        <p class="stat__value"><span class="counter" data-target="50">50</span>+</p>
+        <p class="stat__label">Corporate Events</p>
+      </div>
+
+      <div class="stat">
+        <p class="stat__value"><span class="counter" data-target="10">10</span>+</p>
+        <p class="stat__label">Years Experience</p>
+      </div>
+    </div>
+  </section>
+  <!-- ===== LOCATION ===== -->
+  <section class="section" id="contact" aria-labelledby="location-title">
+    <div class="container location-grid">
+      <div class="location-info reveal">
+        <h2 id="location-title">Our Office</h2>
+        <p class="location-city">Arakandanallur , Tamil Nadu, India</p>
+        <ul class="contact-list">
+          <li><span class="icon-chip icon-chip--sm"><svg class="icon" aria-hidden="true" focusable="false"><use href="#icon-map-pin"></use></svg></span><div><small>Address</small><span class="value">Arakandanallur,Tamil Nadu, India</span></div></li>
+          <li><span class="icon-chip icon-chip--sm"><svg class="icon" aria-hidden="true" focusable="false"><use href="#icon-phone"></use></svg></span><div><small>Phone</small><a href="tel:+917825040275">+91 7825040275</a></div></li>
+          <li><span class="icon-chip icon-chip--sm"><svg class="icon" aria-hidden="true" focusable="false"><use href="#icon-mail"></use></svg></span><div><small>Email</small><a href="mailto:ipsraj84@gmail.com">ipsraj84@gmail.com</a></div></li>
+        </ul>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="tel:+917825040275" phone>Contact Us</a>
+          <a class="btn btn-outline" href="https://www.google.com/maps/search/?api=1&query=Chennai%2C+Tamil+Nadu%2C+India" target="_blank" rel="noopener noreferrer">Get Directions</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div>
+      <a class="brand" href="index.html" aria-label="Eventora – Home">
+        <img src="images/logo.png" alt="" width="42" height="42">
+        <span class="brand__name">GRS<span>Event</span></span>
+      </a>
+      <p>Professional event management for weddings, corporate events, parties, concerts and special occasions, planned with care and delivered on time.</p>
+      <ul class="footer-social" aria-label="Social media">
+        <li><a href="https://wa.me/7825040275" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><svg class="icon" aria-hidden="true" focusable="false"><use href="#icon-whatsapp"></use></svg></a></li>
+        <li><a href="https://instagram.com/magical_event.123?stkn=OWV3anhiODFqaGh4" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><svg class="icon" aria-hidden="true" focusable="false"><use href="#icon-instagram"></use></svg></a></li>
+        <li><a href="https://youtube.com/@RAJKUMARS-ns5ql" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><svg class="icon" aria-hidden="true" focusable="false"><use href="#icon-youtube"></use></svg></a></li>
+      </ul>
+    </div>
+
+    <nav aria-label="Quick links">
+      <h3>Quick Links</h3>
+      <ul class="footer-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="events.html">Events</a></li>
+        <li><a href="company.html">Company</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+
+    <nav aria-label="Services">
+      <h3>Services</h3>
+      <ul class="footer-links">
+        <li><a href="index.html#services">Wedding Events</a></li>
+        <li><a href="index.html#services">Corporate Events</a></li>
+        <li><a href="index.html#services">Birthday Parties</a></li>
+        <li><a href="index.html#services">Concerts</a></li>
+        <li><a href="index.html#services">Photography &amp; Catering</a></li>
+      </ul>
+    </nav>
+
+    <div>
+      <h3>Contact</h3>
+      <ul class="footer-contact">
+        <li><svg class="icon" aria-hidden="true" focusable="false"><use href="#icon-phone"></use></svg><a href="tel:+9178250 40275">+91 78250 40275</a></li>
+        <li><svg class="icon" aria-hidden="true" focusable="false"><use href="#icon-mail"></use></svg><a href="mailto:ipsraj84@gmail.com">ipsraj84@gmail.com</a></li>
+        <li><svg class="icon" aria-hidden="true" focusable="false"><use href="#icon-map-pin"></use></svg><address>Arakandanallur , Tamil Nadu,India</address></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <div class="container">
+      <p>GRS&copy;Event.All rights reserved.</p>
+      <p>Arakandanallur,Tamil Nadu, India</p>
+    </div>
+  </div>
+</footer>
+
+<!-- Floating social buttons (bottom-right, every page) -->
+<div class="floating-social">
+  <a class="float-btn float-btn--whatsapp" href="https://wa.me/7825040275" target="_blank" rel="noopener noreferrer" aria-label="Chat with us on WhatsApp" data-tooltip="WhatsApp"><svg class="icon" aria-hidden="true" focusable="false"><use href="#icon-whatsapp"></use></svg></a>
+  <a class="float-btn float-btn--instagram" href="https://instagram.com/magical_event.123?stkn=OWV3anhiODFqaGh4" target="_blank" rel="noopener noreferrer" aria-label="Follow us on Instagram" data-tooltip="Instagram"><svg class="icon" aria-hidden="true" focusable="false"><use href="#icon-instagram"></use></svg></a>
+  <a class="float-btn float-btn--youtube" href="https://youtube.com/@RAJKUMARS-ns5ql" target="_blank" rel="noopener noreferrer" aria-label="Watch us on YouTube" data-tooltip="YouTube"><svg class="icon" aria-hidden="true" focusable="false"><use href="#icon-youtube"></use></svg></a>
+  <button class="float-btn float-btn--main" id="social-toggle" type="button" aria-haspopup="dialog" aria-controls="social-popup" aria-expanded="false" aria-label="Open social media menu" data-tooltip="Connect with us"><svg class="icon" aria-hidden="true" focusable="false"><use href="#icon-share"></use></svg></button>
+</div>
+
+<!-- "Connect With Us" popup -->
+<div class="social-popup" id="social-popup" role="dialog" aria-modal="true" aria-labelledby="social-popup-title" aria-hidden="true">
+  <div class="social-popup__backdrop" data-close-social></div>
+  <div class="social-popup__card">
+    <button class="social-popup__close" type="button" aria-label="Close" data-close-social><svg class="icon" aria-hidden="true" focusable="false"><use href="#icon-x"></use></svg></button>
+    <h2 id="social-popup-title">Connect With Us</h2>
+    <p class="social-popup__intro">Choose the channel that suits you best.</p>
+    <ul class="social-options">
+      <li class="social-option social-option--whatsapp">
+        <span class="social-option__icon"><svg class="icon" aria-hidden="true" focusable="false"><use href="#icon-whatsapp"></use></svg></span>
+        <span class="social-option__text"><strong>WhatsApp</strong><span>Chat with our event team</span></span>
+        <a class="btn btn-primary btn-sm" href="https://wa.me/7825040275" target="_blank" rel="noopener noreferrer" aria-label="Open WhatsApp">Open</a>
+      </li>
+      <li class="social-option social-option--instagram">
+        <span class="social-option__icon"><svg class="icon" aria-hidden="true" focusable="false"><use href="#icon-instagram"></use></svg></span>
+        <span class="social-option__text"><strong>Instagram</strong><span>See our latest events</span></span>
+        <a class="btn btn-primary btn-sm" href="https://instagram.com/magical_event.123?stkn=OWV3anhiODFqaGh4" target="_blank" rel="noopener noreferrer" aria-label="Open Instagram">Open</a>
+      </li>
+      <li class="social-option social-option--youtube">
+        <span class="social-option__icon"><svg class="icon" aria-hidden="true" focusable="false"><use href="#icon-youtube"></use></svg></span>
+        <span class="social-option__text"><strong>YouTube</strong><span>Watch our event videos</span></span>
+        <a class="btn btn-primary btn-sm" href="https://youtube.com/@RAJKUMARS-ns5ql" target="_blank" rel="noopener noreferrer" aria-label="Open YouTube">Open</a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<button class="back-to-top" id="back-to-top" type="button" aria-label="Back to top"><svg class="icon" aria-hidden="true" focusable="false"><use href="#icon-arrow-up"></use></svg></button>
+
+</body>
+</html>

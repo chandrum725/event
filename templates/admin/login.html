@@ -1,0 +1,50 @@
+{% extends 'admin/base.html' %}
+{% block title %}Admin sign in | Eventora{% endblock %}
+
+{% block body %}
+<main class="admin-auth" id="main">
+  <div class="admin-auth__card">
+    <a class="admin-auth__brand" href="{{ url_for('site_index') }}">
+      <img src="{{ url_for('site_file', filename='images/logo.png') }}" alt="" width="42" height="42">
+      <span class="brand__name">GRS<span>Event</span></span>
+    </a>
+
+    <h1 class="admin-auth__title">Admin sign in</h1>
+    <p class="admin-auth__lead">
+      This area belongs to the Eventora team. Photos and films you upload stay
+      <strong>admin only</strong> until you decide to publish them.
+    </p>
+
+    {% include 'admin/_flashes.html' %}
+
+    {% if database_down %}
+      <p class="admin-auth__foot">
+        <strong>MySQL is not running.</strong> Start it with <code>.\start.ps1 db</code>, or keep
+        <code>MYSQL_AUTOSTART=1</code> in <code>.env</code> and the app starts it for you.
+      </p>
+    {% endif %}
+
+    <form class="admin-form" method="post" action="{{ url_for('admin_login') }}" autocomplete="on">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+      <input type="hidden" name="next" value="{{ next_url }}">
+
+      <label class="admin-field">
+        <span class="admin-field__label">Username</span>
+        <input type="text" name="username" value="{{ username }}" required autocomplete="username" autofocus>
+      </label>
+
+      <label class="admin-field">
+        <span class="admin-field__label">Password</span>
+        <input type="password" name="password" required autocomplete="current-password">
+      </label>
+
+      <button class="btn btn-primary admin-form__submit" type="submit">Sign in</button>
+    </form>
+
+    <p class="admin-auth__foot">
+      <a href="{{ url_for('site_index') }}">← Back to the website</a><br>
+      <small>No account yet? Run <code>python app.py create-admin</code> on the server.</small>
+    </p>
+  </div>
+</main>
+{% endblock %}

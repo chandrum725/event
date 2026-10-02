@@ -1,0 +1,285 @@
+{% extends 'admin/base.html' %}
+{% block title %}Media library | Eventora admin{% endblock %}
+
+{% block head %}
+  <script src="{{ url_for('site_file', filename='js/admin.js') }}" defer></script>
+{% endblock %}
+
+{% block body %}
+<header class="admin-topbar">
+  <div class="container admin-topbar__inner">
+    <a class="brand" href="{{ url_for('admin_dashboard') }}">
+      <img src="{{ url_for('site_file', filename='images/logo.png') }}" alt="" width="42" height="42">
+      <span class="brand__name">GRS<span>Event</span></span>
+      <span class="admin-tag">Admin</span>
+    </a>
+
+    <div class="admin-topbar__actions">
+      <span class="admin-topbar__who">Signed in as <strong>{{ current_admin.username }}</strong></span>
+      <a class="btn btn-outline btn-sm" href="{{ url_for('site_index') }}">View website</a>
+      <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Switch to dark mode">
+        <svg class="icon icon-moon" aria-hidden="true" focusable="false"><use href="#icon-moon"></use></svg>
+        <svg class="icon icon-sun" aria-hidden="true" focusable="false"><use href="#icon-sun"></use></svg>
+      </button>
+      <form method="post" action="{{ url_for('admin_logout') }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <button class="btn btn-outline btn-sm" type="submit">Sign out</button>
+      </form>
+    </div>
+  </div>
+</header>
+
+<main class="container admin-main" id="main">
+  {% include 'admin/_flashes.html' %}
+
+  <h1 class="admin-title">Photos &amp; films</h1>
+  <p class="admin-lead">
+    Everything you upload is <strong>admin only</strong> at first: visitors see an
+    item in the gallery on <code>events.html</code> only after you press
+    <em>Publish to viewers</em>. A private file is never sent to a browser that is
+    not signed in here.
+  </p>
+
+  {% if db_error %}
+    <div class="admin-alert" role="alert">
+      <h2>MySQL is not reachable</h2>
+      <p>{{ db_error }}</p>
+      <ol class="admin-alert__steps">
+        <li>Start MySQL: run <code>.\start.ps1 db</code> in the project folder (no MySQL
+            Windows service is registered on this machine, so nothing starts it at boot).</li>
+        <li>Keep <code>MYSQL_AUTOSTART=1</code> in <code>.env</code> and the app starts MySQL
+            by itself the next time the port is closed – see this panel's log output.</li>
+        <li>Check <code>MYSQL_HOST</code>, <code>MYSQL_PORT</code>, <code>MYSQL_USER</code>
+            and <code>MYSQL_PASSWORD</code> in <code>.env</code>.</li>
+        <li>Run <code>python app.py init-db</code> to create the tables and the first administrator.</li>
+      </ol>
+    </div>
+  {% else %}
+    <section class="admin-stats" aria-label="Library summary">
+      <article class="admin-stat">
+        <p class="admin-stat__value">{{ stats.total }}</p>
+        <p class="admin-stat__label">Items in total</p>
+      </article>
+      <article class="admin-stat">
+        <p class="admin-stat__value">{{ stats.published }}</p>
+        <p class="admin-stat__label">Published to viewers</p>
+      </article>
+      <article class="admin-stat admin-stat--private">
+        <p class="admin-stat__value">{{ stats.private_items }}</p>
+        <p class="admin-stat__label">Admin only</p>
+      </article>
+      <article class="admin-stat">
+        <p class="admin-stat__value">{{ stats.images }}</p>
+        <p class="admin-stat__label">Images</p>
+      </article>
+      <article class="admin-stat">
+        <p class="admin-stat__value">{{ stats.videos }}</p>
+        <p class="admin-stat__label">Films</p>
+      </article>
+    </section>
+  {% endif %}
+
+  <section class="admin-panel" aria-labelledby="upload-title">
+    <h2 class="admin-panel__title" id="upload-title">Add a photo or a film</h2>
+    <p class="admin-panel__hint">
+      Photos: PNG, JPG, GIF, WEBP or AVIF, up to {{ max_image_mb }} MB ·
+      Films: MP4, WEBM, OGV, MOV or M4V, up to {{ max_video_mb }} MB.
+      Every file is inspected before it is stored, so a renamed script or a broken
+      upload is refused.
+    </p>
+
+    <form class="admin-upload" method="post" action="{{ url_for('admin_media_upload') }}"
+          enctype="multipart/form-data" data-upload-form>
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+
+      <div class="admin-grid admin-grid--2">
+        <label class="admin-field">
+          <span class="admin-field__label">Title</span>
+          <input type="text" name="title" maxlength="160" placeholder="e.g. Royal Palace Wedding" data-title-input>
+          <small class="admin-field__hint">Leave empty to use the file name.</small>
+        </label>
+
+        <label class="admin-field">
+          <span class="admin-field__label">Category</span>
+          <select name="category">
+            {% for option in categories %}
+              <option value="{{ option.value }}">{{ option.label }}</option>
+            {% endfor %}
+          </select>
+        </label>
+
+        <label class="admin-field">
+          <span class="admin-field__label">Media type</span>
+          <select name="kind" data-kind-select>
+            <option value="image">Image (photo)</option>
+            <option value="video">Video (film)</option>
+          </select>
+        </label>
+
+        <label class="admin-field">
+          <span class="admin-field__label">Who can see it?</span>
+          <select name="visibility">
+            <option value="private" selected>Admin only – hidden from viewers</option>
+            <option value="published">Publish to viewers now</option>
+          </select>
+        </label>
+
+        <label class="admin-field admin-field--wide">
+          <span class="admin-field__label">File</span>
+          <input type="file" name="file" required data-file-input
+                 accept=".png,.jpg,.jpeg,.gif,.webp,.avif,.mp4,.webm,.ogv,.mov,.m4v">
+        </label>
+
+        <label class="admin-field admin-field--wide" data-poster-field hidden>
+          <span class="admin-field__label">Poster for the film (optional)</span>
+          <input type="file" name="poster" accept=".png,.jpg,.jpeg,.gif,.webp,.avif" data-poster-input>
+          <small class="admin-field__hint">Without a poster, a branded placeholder is generated for the gallery tile.</small>
+        </label>
+      </div>
+
+      <div class="admin-preview" data-preview hidden></div>
+      <button class="btn btn-primary" type="submit">Upload</button>
+    </form>
+  </section>
+
+  <section class="admin-panel" aria-labelledby="library-title">
+    <h2 class="admin-panel__title" id="library-title">Media library</h2>
+    <p class="admin-panel__hint">
+      {{ items|length }} item(s) in this view.
+      {% if view == 'published' %}These are the ones visitors can see.
+      {% elif view == 'private' %}None of these reach a visitor yet.
+      {% else %}“Admin only” items stay invisible to visitors.{% endif %}
+    </p>
+
+    <nav class="admin-filters" aria-label="Filter the library">
+      <a class="admin-filter {{ 'is-active' if view == 'all' else '' }}"
+         href="{{ url_for('admin_dashboard', view='all', category=category, kind=kind) }}">All</a>
+      <a class="admin-filter {{ 'is-active' if view == 'published' else '' }}"
+         href="{{ url_for('admin_dashboard', view='published', category=category, kind=kind) }}">Published</a>
+      <a class="admin-filter {{ 'is-active' if view == 'private' else '' }}"
+         href="{{ url_for('admin_dashboard', view='private', category=category, kind=kind) }}">Admin only</a>
+      <span class="admin-filters__divider" aria-hidden="true"></span>
+      {% for option in categories %}
+        <a class="admin-filter {{ 'is-active' if category == option.value else '' }}"
+           href="{{ url_for('admin_dashboard', view=view, category=option.value, kind=kind) }}">{{ option.label }}</a>
+      {% endfor %}
+      <a class="admin-filter {{ 'is-active' if kind == 'video' else '' }}"
+         href="{{ url_for('admin_dashboard', view=view, category=category, kind='video') }}">Films</a>
+      {% if view != 'all' or category or kind %}
+        <a class="admin-filter admin-filter--reset" href="{{ url_for('admin_dashboard') }}">Clear filters</a>
+      {% endif %}
+    </nav>
+
+    {% if items %}
+      <div class="admin-media-grid">
+        {% for item in items %}
+          <article class="admin-media {{ 'is-private' if item.is_private else 'is-published' }}">
+            <div class="admin-media__thumb">
+              <img src="{{ item.poster_url or item.url }}" alt="" width="480" height="360" loading="lazy">
+              {% if item.kind == 'video' %}
+                <span class="admin-media__play" aria-hidden="true">
+                  <svg class="icon" aria-hidden="true" focusable="false"><use href="#icon-play"></use></svg>
+                </span>
+              {% endif %}
+              <span class="admin-media__badge admin-media__badge--{{ item.visibility }}">
+                {{ 'Admin only' if item.is_private else 'Published' }}
+              </span>
+            </div>
+
+            <div class="admin-media__body">
+              <h3 class="admin-media__title">{{ item.title }}</h3>
+              <p class="admin-media__meta">
+                {{ item.category_label }} · {{ 'Image' if item.kind == 'image' else 'Film' }} ·
+                {{ item.size_label }}
+              </p>
+              <p class="admin-media__meta">
+                Added {{ item.created_at_label }}
+                {%- if item.uploaded_by %} by {{ item.uploaded_by }}{% endif %}
+              </p>
+
+              <div class="admin-media__actions">
+                <form method="post" action="{{ url_for('admin_media_visibility', media_id=item.id) }}">
+                  <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                  <input type="hidden" name="visibility"
+                         value="{{ 'published' if item.is_private else 'private' }}">
+                  <button class="btn btn-sm {{ 'btn-primary' if item.is_private else 'btn-outline' }}"
+                          type="submit">
+                    {{ 'Publish to viewers' if item.is_private else 'Hide from viewers' }}
+                  </button>
+                </form>
+
+                <a class="btn btn-sm btn-outline" href="{{ item.url }}" target="_blank"
+                   rel="noopener">Open file</a>
+                <button class="btn btn-sm btn-outline js-copy" type="button"
+                        data-copy="{{ item.url }}">Copy link</button>
+
+                <form method="post" action="{{ url_for('admin_media_delete', media_id=item.id) }}"
+                      data-confirm="Delete &ldquo;{{ item.title }}&rdquo;? The file and its poster are removed from disk too.">
+                  <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                  <button class="btn btn-sm btn-danger" type="submit">Delete</button>
+                </form>
+              </div>
+
+              <details class="admin-media__edit">
+                <summary>Edit details</summary>
+                <form method="post" action="{{ url_for('admin_media_update', media_id=item.id) }}">
+                  <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+
+                  <label class="admin-field">
+                    <span class="admin-field__label">Title</span>
+                    <input type="text" name="title" value="{{ item.title }}" maxlength="160">
+                  </label>
+
+                  <label class="admin-field">
+                    <span class="admin-field__label">Category</span>
+                    <select name="category">
+                      {% for option in categories %}
+                        <option value="{{ option.value }}"
+                          {{ 'selected' if option.value == item.category else '' }}>{{ option.label }}</option>
+                      {% endfor %}
+                    </select>
+                  </label>
+
+                  <label class="admin-field">
+                    <span class="admin-field__label">Visibility</span>
+                    <select name="visibility">
+                      <option value="private" {{ 'selected' if item.is_private else '' }}>Admin only</option>
+                      <option value="published" {{ 'selected' if not item.is_private else '' }}>Published to viewers</option>
+                    </select>
+                  </label>
+
+                  <button class="btn btn-primary btn-sm" type="submit">Save changes</button>
+                </form>
+              </details>
+            </div>
+          </article>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p class="admin-empty">
+        Nothing in this view yet. Upload a photo or a film above – it appears here
+        straight away.
+      </p>
+    {% endif %}
+  </section>
+
+  <section class="admin-panel admin-panel--quiet" aria-labelledby="api-title">
+    <h2 class="admin-panel__title" id="api-title">JSON API</h2>
+    <p class="admin-panel__hint">
+      The same actions are available to scripts. Take the CSRF token from
+      <code>GET /api/admin/session</code> and send it in the
+      <code>X-CSRF-Token</code> header.
+    </p>
+    <ul class="admin-api">
+      <li><code>GET /api/media</code> – the public feed: published items only</li>
+      <li><code>GET /api/admin/media?visibility=all|published|private</code> – every item, private ones included</li>
+      <li><code>POST /api/admin/media</code> – multipart upload: file, poster, title, category, kind, visibility</li>
+      <li><code>POST /api/admin/media/&lt;id&gt;</code> – change the title, category or visibility</li>
+      <li><code>DELETE /api/admin/media/&lt;id&gt;</code> – delete the row and its files</li>
+      <li><code>GET /api/health</code> – Flask and MySQL status</li>
+    </ul>
+  </section>
+</main>
+{% endblock %}
+
+

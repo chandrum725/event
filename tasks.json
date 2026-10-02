@@ -1,0 +1,67 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Flask: run app (workspace root)",
+      "detail": "Starts the dev server from the workspace root using the local venv.",
+      "type": "shell",
+      "command": ".\\venv\\Scripts\\python.exe app.py",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "clear": true
+      },
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    },
+    {
+      "label": "Flask: run app (project folder)",
+      "detail": "Starts the dev server from the event-management-website folder.",
+      "type": "shell",
+      "command": ".\\venv\\Scripts\\python.exe app.py",
+      "options": {
+        "cwd": "${workspaceFolder}\\event-management-website"
+      },
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "clear": true
+      }
+    },
+    {
+      "label": "Flask: install requirements",
+      "detail": "Installs the pinned requirements into the local venv.",
+      "type": "shell",
+      "command": ".\\venv\\Scripts\\python.exe -m pip install -r requirements.txt",
+      "options": {
+        "cwd": "${workspaceFolder}\\event-management-website"
+      },
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "clear": true
+      }
+    },
+    {
+      "label": "Flask: stop servers on port 5000",
+      "detail": "Frees port 5000 when an old server is still running (Address already in use).",
+      "type": "shell",
+      "command": "Get-NetTCPConnection -LocalPort 5000 -State Listen -ErrorAction SilentlyContinue | Select-Object -ExpandProperty OwningProcess -Unique | ForEach-Object { Stop-Process -Id $_ -Force -ErrorAction SilentlyContinue }; Write-Host 'Port 5000 is now free.'",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "clear": true
+      }
+    }
+  ]
+}

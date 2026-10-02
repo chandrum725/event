@@ -1,0 +1,11 @@
+{# Flash messages, shared by every admin page.
+   Categories used by app.py: success, error, info. #}
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <ul class="admin-flashes">
+      {% for category, message in messages %}
+        <li class="admin-flash admin-flash--{{ category }}">{{ message }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}

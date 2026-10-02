@@ -1,0 +1,16 @@
+{% extends 'admin/base.html' %}
+{% block title %}{{ status }} {{ heading }} | Eventora{% endblock %}
+
+{% block body %}
+<main class="admin-error" id="main">
+  <div class="admin-error__card">
+    <p class="admin-error__status">{{ status }}</p>
+    <h1>{{ heading }}</h1>
+    <p>{{ message }}</p>
+    <p class="admin-error__actions">
+      <a class="btn btn-primary" href="{{ url_for('site_index') }}">Go to the website</a>
+      <a class="btn btn-outline" href="{{ url_for('admin_dashboard') }}">Open the admin panel</a>
+    </p>
+  </div>
+</main>
+{% endblock %}

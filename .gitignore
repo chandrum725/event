@@ -1,0 +1,16 @@
+# --- Python backend -------------------------------------------------------
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env
+
+# --- Admin uploads (photos, films and generated posters) ------------------
+uploads/
+
+# --- Editors / OS --------------------------------------------------------
+.vscode/
+.idea/
+Thumbs.db
+Desktop.ini
+.DS_Store

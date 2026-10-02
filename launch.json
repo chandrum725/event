@@ -1,0 +1,25 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Python: Flask (event-management-website)",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}\\event-management-website\\app.py",
+      "cwd": "${workspaceFolder}\\event-management-website",
+      "python": "${workspaceFolder}\\venv\\Scripts\\python.exe",
+      "console": "integratedTerminal",
+      "justMyCode": true
+    },
+    {
+      "name": "Python: Flask (workspace root launcher)",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}\\app.py",
+      "cwd": "${workspaceFolder}",
+      "python": "${workspaceFolder}\\venv\\Scripts\\python.exe",
+      "console": "integratedTerminal",
+      "justMyCode": true
+    }
+  ]
+}
